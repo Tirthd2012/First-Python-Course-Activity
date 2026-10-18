@@ -1,158 +1,143 @@
-# Rename the file to main.py 
+#name the file as main.py , uncomment the imports and basic functions, complete  the code by writing remainig functions 
 
-# ------------------------------------------------------
-# 1) IMPORTS & SETUP
-# ------------------------------------------------------
-# - Import colorama for colored text
-import colorama
-# - Import specific color constants (e.g., Fore, Style)
-from colorama import Fore, Style
-# - Import textblob for sentiment analysis
-from textblob import TextBlob
-# - Initialize colorama for cross-platform color support
-colorama.init()
+# import re, random
+# from colorama import Fore, init
 
-# ------------------------------------------------------
-# 2) INITIAL GREETING
-# ------------------------------------------------------
-# - Print a welcome message using a color (e.g., Fore.CYAN)
+import re, random
 
-# - Include emojis (e.g., '👋', '🕵️') for a fun greeting
-print(f"{Fore.CYAN}???????? Welcome to Sentiment Spy! ????️{Style.RESET_ALL}")
-# ------------------------------------------------------
-# 3) USER NAME INPUT
-# ------------------------------------------------------
-# - Prompt the user for their name
-# - Strip extra whitespace
-# - If empty, default to "Mystery Agent"
-user_name = input(f"{Fore.MAGENTA}Please enter your name: {Style.RESET_ALL} ").strip()
-
-if not user_name:
-
-    user_name = "Mystery Agent" # Fallback if user doesn't provide a name
-# ------------------------------------------------------
-# 4) CONVERSATION HISTORY
-# ------------------------------------------------------
-# - Create a structure (e.g., list) to store each user input
-#   along with its polarity and sentiment type
-# - For example: (user_text, polarity, sentiment_type)
-conversation_history = []
-# ------------------------------------------------------
-# 5) INSTRUCTIONS
-# ------------------------------------------------------
-# - Print instructions to the user describing the available
-#   commands (e.g., 'reset', 'history', 'exit')
-print(f"\n{Fore.CYAN}Hello, Agent {user_name}!")
-
-print(f"Type a Sentence and I will analyze your sentences with TextBlob and show you the sentiment. ????")
-
-print(f"Type {Fore.YELLOW}'reset'{Fore.CYAN}, {Fore.YELLOW}'history'{Fore.CYAN}, "
-
-f"or {Fore.YELLOW}'exit'{Fore.CYAN} to quit.{Style.RESET_ALL}\n")
-# ------------------------------------------------------
-# 6) MAIN INTERACTION LOOP
-# ------------------------------------------------------
-# - Use a 'while True:' loop to repeatedly prompt the user
-# - Read input and strip whitespace
-# - If empty, notify the user and continue
-while True:
-
-    user_input = input(f"{Fore.GREEN}>> {Style.RESET_ALL}").strip()
+from colorama import Fore, init
+# # Initialize colorama (autoreset ensures each print resets after use)
+# init(autoreset=True)
+init(autoreset=True)
 
 
-    if not user_input:
+# # Destination & joke data
+# destinations = {
+#     "beaches": ["Bali", "Maldives", "Phuket"],
+#     "mountains": ["Swiss Alps", "Rocky Mountains", "Himalayas"],
+#     "cities": ["Tokyo", "Paris", "New York"]
+# }
+# jokes = [
+#     "Why don't programmers like nature? Too many bugs!",
+#     "Why did the computer go to the doctor? Because it had a virus!",
+#     "Why do travelers always feel warm? Because of all their hot spots!"
+# ]
+destinations = {
 
-        print(f"{Fore.RED}Please enter some text or a valid command.{Style.RESET_ALL}")
+"beaches": ["Bali", "Maldives", "Phuket"],
 
-        continue
-#     6.1) 'exit' COMMAND
-#         - If user_input.lower() == 'exit':
-#           - Print a farewell message
-#           - Break out of the loop to end the program
+"mountains": ["Swiss Alps", "Rocky Mountains", "Himalayas"],
 
-    if user_input.lower() == "exit":
+"cities": ["Tokyo", "Paris", "New York"]
 
-        print(f"\n{Fore.BLUE}???? Exiting Sentiment Spy. Farewell, Agent {user_name}! ????{Style.RESET_ALL}")
+}
 
-        break
-#     6.2) 'reset' COMMAND
-#         - Clear the conversation history
-#         - Print a message confirming reset
-    elif user_input.lower() == "reset":
+jokes = [
 
-        conversation_history.clear()
+"Why don't programmers like nature? Too many bugs!",
 
-        print(f"{Fore.CYAN}???? All conversation history cleared!{Style.RESET_ALL}")
+"Why did the computer go to the doctor? Because it had a virus!",
 
-        continue
-#     6.3) 'history' COMMAND
-#         - If no history, print a message indicating so
-#         - Otherwise, print each conversation entry
-#           - Show text, polarity (formatted), and sentiment type
-#           - Use color and emojis based on sentiment
-#         - Continue the loop
-    elif user_input.lower() == "history":
+"Why do travelers always feel warm? Because of all their hot spots!"
 
-        if not conversation_history:
-            print(f"{Fore.YELLOW}No conversation history yet.{Style.RESET_ALL}")
+]
+# # Helper function to normalize user input (remove extra spaces, make lowercase)
+# def normalize_input(text):
+#     return re.sub(r"\s+", " ", text.strip().lower())
+
+def normalize_input(text):
+	return re.sub(r"\s+", " ", text.strip().lower())
+# Provide travel recommendations (recursive if user rejects suggestions)
+
+def recommend():
+	print(Fore.CYAN + "TravelBot: Beaches, mountains, or cities?")
+	preference = input(Fore.YELLOW + "You: ")
+	preference = normalize_input(preference)
+
+	if preference in destinations:
+		suggestion = random.choice(destinations[preference])
+		print(Fore.GREEN + f"TravelBot: How about {suggestion}?")
+		print(Fore.CYAN + "TravelBot: Do you like it? (yes/no)")
+		answer = normalize_input(input(Fore.YELLOW + "You: "))
+
+		if answer == "yes":
+			print(Fore.GREEN + f"TravelBot: Awesome! Enjoy {suggestion}!")
+		elif answer == "no":
+			print(Fore.RED + "TravelBot: Let's try another.")
+			recommend()  # Recursive call if the user rejects the suggestion
+		else:
+			print(Fore.RED + "TravelBot: I'll suggest again.")
+			recommend()  # Recursive call on unrecognized answer
+	else:
+		print(Fore.RED + "TravelBot: Sorry, I don't have that type of destination.")
+# Offer packing tips based on user’s destination and duration
+
+def packing_tips():
+
+	print(Fore.CYAN + "TravelBot: Where to?")
+
+	location = normalize_input(input(Fore.YELLOW + "You: "))
+
+	print(Fore.CYAN + "TravelBot: How many days?")
+
+	days = input(Fore.YELLOW + "You: ")
+
+
+	print(Fore.GREEN + f"TravelBot: Packing tips for {days} days in {location}:")
+
+	print(Fore.GREEN + "- Pack versatile clothes.")
+
+	print(Fore.GREEN + "- Bring chargers/adapters.")
+
+	print(Fore.GREEN + "- Check the weather forecast.")
+
+
+# Tell a random joke
+def tell_joke():
+
+	print(Fore.YELLOW + f"TravelBot: {random.choice(jokes)}")
+# Display help menu
+def show_help():
+
+	print(Fore.MAGENTA + "\nI can:")
+
+	print(Fore.GREEN + "- Suggest travel spots (say 'recommendation')")
+
+	print(Fore.GREEN + "- Offer packing tips (say 'packing')")
+
+	print(Fore.GREEN + "- Tell a joke (say 'joke')")
+
+	print(Fore.CYAN + "Type 'exit' or 'bye' to end.\n")
+# Main chat loop
+
+def chat():
+
+    print(Fore.CYAN + "Hello! I'm TravelBot.")
+
+    name = input(Fore.YELLOW + "Your name? ")
+
+    print(Fore.GREEN + f"Nice to meet you, {name}!")
+
+    show_help()
+
+    while True:
+        user_input = input(Fore.YELLOW + f"{name}: ")
+        user_input = normalize_input(user_input)
+
+        if "recommend" in user_input or "suggest" in user_input:
+            recommend()
+        elif "pack" in user_input or "packing" in user_input:
+            packing_tips()
+        elif "joke" in user_input or "funny" in user_input:
+            tell_joke()
+        elif "help" in user_input:
+            show_help()
+        elif "exit" in user_input or "bye" in user_input:
+            print(Fore.CYAN + "TravelBot: Safe travels! Goodbye!")
+            break
         else:
-            print(f"{Fore.CYAN}???? Conversation History:{Style.RESET_ALL}")
+            print(Fore.RED + "TravelBot: Could you rephrase?")
 
-            for idx, (text, polarity, sentiment_type) in enumerate(conversation_history, start=1):
-                if sentiment_type == "Positive":
-                    color = Fore.GREEN
-                    emoji = "????"
-                elif sentiment_type == "Negative":
-                    color = Fore.RED
-                    emoji = "????"
-                else:
-                    color = Fore.YELLOW
-                    emoji = "????"
-
-                print(
-                    f"{idx}. {color}{emoji} {text} "
-                    f"(Polarity: {polarity:.2f}, {sentiment_type}){Style.RESET_ALL}"
-                )
-
-        continue
-#     6.4) SENTIMENT ANALYSIS
-#         - If the input is not a command, analyze sentiment
-#         - Use TextBlob(user_input).sentiment.polarity to get a float
-#           between -1.0 and +1.0
-#         - Define thresholds:
-#             > 0.25 -> Positive
-#             < -0.25 -> Negative
-#             Otherwise -> Neutral
-#         - Assign color and emoji accordingly (e.g., GREEN/😊, RED/😢, YELLOW/😐)
-#         - Append the tuple (text, polarity, sentiment_type) to the history
-#         - Print a result message showing sentiment type and polarity
-    polarity = TextBlob(user_input).sentiment.polarity
-
-    if polarity > 0.25:
-        sentiment_type = "Positive"
-        color = Fore.GREEN
-        emoji = "😊"
-    elif polarity < -0.25:
-        sentiment_type = "Negative"
-        color = Fore.RED
-        emoji = "😢"
-    else:
-        sentiment_type = "Neutral"
-        color = Fore.YELLOW
-        emoji = "😐"
-
-    conversation_history.append((user_input, polarity, sentiment_type))
-    print(
-        f"{color}{emoji} {sentiment_type} sentiment "
-        f"(Polarity: {polarity:.2f}){Style.RESET_ALL}"
-    )
-conversation_history.append((user_input, polarity, sentiment_type))
-
-print(f"{color}{emoji} {sentiment_type} sentiment detected! "
-
-f"(Polarity: {polarity:.2f}){Style.RESET_ALL}")
-# ------------------------------------------------------
-# END
-# ------------------------------------------------------
-# - The program terminates when 'exit' is typed
-# - No additional code is shown beyond these comments
+# Run the chatbot
+if __name__ == "__main__":
+    chat()
